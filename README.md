@@ -4,11 +4,6 @@ Timeline.js is a javascript library which allow you to simply create elegant tim
 
 ## Install library
 
-With npm : 
-```
-npm install ...
-```
-
 With Github : 
 ```
 git clone https://github.com/SolalDR/timeline.js/
