@@ -1,0 +1,24 @@
+.timeline--light {
+	.timeline {
+		&__item {
+			background-color: $item-color; 
+			&--active {
+				background-color: $item-color--active; 
+				& .timeline__content {
+					color: black;
+				}
+			}
+		}
+		&__strokes {
+			&--vertical::before, &--horizontal::after {
+				background-color: white;	
+			}
+		}
+		&__content { 
+			font-family: sans-serif;
+			font-weight: 100;
+			color: white;
+			letter-spacing: 2px;
+		}
+	}
+}

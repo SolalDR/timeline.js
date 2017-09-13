@@ -1,0 +1,17 @@
+
+$theme : "light"; 
+
+// Sizes
+$item-width: 70px; 
+$item-height: 70px;
+$space-between: 150px;
+
+// Colors 
+$item-color: rgba(255, 255, 255, .1);
+$item-color--active: rgba(255, 255, 255, 1);
+
+
+// Animation
+$duration_long : .7s;
+$duration_small : .2s;
+$timing-function : cubic-bezier(.47,2.18,1,1);  

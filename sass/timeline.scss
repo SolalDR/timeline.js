@@ -1,0 +1,97 @@
+@import "variable";
+@import "themes/light"; 
+
+
+.timeline {
+	position: relative;
+	width: 100%;
+	height: 500px; 
+	overflow: hidden;
+	// Miss &--vertical | &--horizontal
+
+	//LAYOUT
+	&__layout {
+		position: absolute;
+		top: 0; left: 0;
+		transition: .3s;
+	}
+	&--vertical &__layout  {
+		height: 100%;
+	}
+	&--horizontal &__layout  {
+		width: 100%;
+	}
+
+
+	//ITEM
+	&__item {
+		position: absolute;
+		width: $item-width;
+		height: $item-height;
+		border: 1px solid white;
+		border-radius: 100%;
+		transform: translateX(-50%) translateY(-50%) scale(1);
+		transition: $duration_long; 
+		&:hover {
+			transition: $duration_small $timing-function; 
+			transform: translateX(-50%) translateY(-50%) scale(1);
+		}
+		&--active {
+			transform: translateX(-50%) translateY(-50%) scale(1);
+			width: $item-width*1.2; 
+			height: $item-width*1.2; 
+		}
+	}
+
+	&__strokes {
+
+		&--vertical::before, &--horizontal::after {
+			content:"";
+			position: absolute; 
+			display: block; 
+		}
+
+		&--vertical {
+			&::before, &::after {
+				left: 50%; 
+				top: calc(50% + #{$item-width/2});
+				width: 1px; 
+			}
+			&::after { height: $space-between - $item-width; }
+			&:first-child::before {
+				top: auto; 
+				left: calc(50% + #{$item-width/2}); 
+				height: 100vw;
+			}
+			&:last-child::after { height: 100vw; }
+		}
+
+		&--horizontal {
+			&::before, &::after {
+				top: 50%; 
+				left: calc(50% + #{$item-width/2});
+				height: 1px; 
+			}
+			&::after { width: $space-between - $item-width; }
+			&:first-child::before {
+				left: auto; 
+				right: calc(50% + #{$item-width/2}); 
+				width: 100vw;
+			}
+			&:last-child::after { width: 100vw; }
+
+		}
+
+
+	}
+
+	&__content {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+		transition: .5s;
+	}
+}
+

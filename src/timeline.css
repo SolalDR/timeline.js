@@ -1,0 +1,80 @@
+.timeline--light .timeline__item {
+  background-color: rgba(255, 255, 255, 0.1); }
+  .timeline--light .timeline__item--active {
+    background-color: white; }
+    .timeline--light .timeline__item--active .timeline__content {
+      color: black; }
+.timeline--light .timeline__strokes--vertical::before, .timeline--light .timeline__strokes--horizontal::after {
+  background-color: white; }
+.timeline--light .timeline__content {
+  font-family: sans-serif;
+  font-weight: 100;
+  color: white;
+  letter-spacing: 2px; }
+
+.timeline {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden; }
+  .timeline__layout {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: .3s; }
+  .timeline--vertical .timeline__layout {
+    height: 100%; }
+  .timeline--horizontal .timeline__layout {
+    width: 100%; }
+  .timeline__item {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: 1px solid white;
+    border-radius: 100%;
+    transform: translateX(-50%) translateY(-50%) scale(1);
+    transition: 0.7s; }
+    .timeline__item:hover {
+      transition: 0.2s cubic-bezier(0.47, 2.18, 1, 1);
+      transform: translateX(-50%) translateY(-50%) scale(1); }
+    .timeline__item--active {
+      transform: translateX(-50%) translateY(-50%) scale(1);
+      width: 84px;
+      height: 84px; }
+  .timeline__strokes--vertical::before, .timeline__strokes--horizontal::after {
+    content: "";
+    position: absolute;
+    display: block; }
+  .timeline__strokes--vertical::before, .timeline__strokes--vertical::after {
+    left: 50%;
+    top: calc(50% + 35px);
+    width: 1px; }
+  .timeline__strokes--vertical::after {
+    height: 80px; }
+  .timeline__strokes--vertical:first-child::before {
+    top: auto;
+    left: calc(50% + 35px);
+    height: 100vw; }
+  .timeline__strokes--vertical:last-child::after {
+    height: 100vw; }
+  .timeline__strokes--horizontal::before, .timeline__strokes--horizontal::after {
+    top: 50%;
+    left: calc(50% + 35px);
+    height: 1px; }
+  .timeline__strokes--horizontal::after {
+    width: 80px; }
+  .timeline__strokes--horizontal:first-child::before {
+    left: auto;
+    right: calc(50% + 35px);
+    width: 100vw; }
+  .timeline__strokes--horizontal:last-child::after {
+    width: 100vw; }
+  .timeline__content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transition: .5s; }
+
+/*# sourceMappingURL=timeline.css.map */

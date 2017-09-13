@@ -1,0 +1,23 @@
+{
+  "name": "timeline.js",
+  "version": "1.0.0",
+  "description": "Little library which create a interactive timeline. ",
+  "main": "src/timeline.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Solal Dussout-Revel",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "latest",
+    "gulp-csso": "latest",
+    "gulp-load-plugins": "latest",
+    "gulp-minify": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest"
+  }
+}
