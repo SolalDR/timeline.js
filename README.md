@@ -12,16 +12,33 @@ git clone https://github.com/SolalDR/timeline.js/
 ## How to use
 
 ``` javascript
-// Instantiate the timline
-var timeline = new Timeline({
-	container: document.getElementById("container-timeline")
-}); 
+window.addEventListener("load", function(){
 
-// Add dates to timeline
-timeline.addDate(Date.new({year: 2012}), "Your label there");
-timeline.addDate(Date.new({year: 2015}), "Your label there");
-timeline.addDate(Date.new({year: 2014}), "Your label there");
+	// Instantiate timeline
+	timeline = new Timeline({
+		container: document.getElementById("container-timeline"), 
+		bubble: { alternate: true}, 
+		direction: "vertical"
+	}); 
 
-// Display the timeline
-timeline.create();
+	//Add a date 
+	timeline.addDate( 
+		{  
+			year: 2015,  month: 2, // ... day, minute, seconds, milliseconds 
+		}, 
+		{ 
+			title: "Test1", 
+			content: "Lorem ipsum sit dolor ammet"
+		}
+	)
+			
+	// And others... 
+	timeline.addDate( { year: 2012 }, 
+		{ title: "Test2", content: "Lorem ipsum sit dolor ammet" })
+	timeline.addDate( { year: 2011 }, { title: "Test3", content: "Lorem ipsum sit dolor ammet" })
+	timeline.addDate( { year: 2018 }, { title: "Test4", content: "Lorem ipsum sit dolor ammet" })
+
+	// Generate timeline
+	timeline.create();
+})
 ```
