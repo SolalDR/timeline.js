@@ -216,6 +216,7 @@ Timeline.prototype = {
 				var paralaxDecal  = x/t*100;
 				this.el.style.backgroundPosition = paralaxDecal+"% 0";
 			}
+			
 		}
 
 	},

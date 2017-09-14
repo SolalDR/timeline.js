@@ -10,7 +10,10 @@
 	overflow: hidden;
 	font-weight: 100; 
 	font-family: sans-serif; 
-	// Miss &--vertical | &--horizontal
+	background-image: linear-gradient(-25deg, #a4d8ff, #4c289d); 
+	background-size: 130%;
+	background-position: 0% 0;
+	transition: .5s;
 
 	//LAYOUT
 	&__layout {
@@ -48,32 +51,38 @@
 
 	&__strokes {
 
-		&--vertical::before, &--horizontal::after {
-			content:"";
-			position: absolute; 
-			display: block; 
+		&--vertical::before, &--vertical::after, &--horizontal::before, &--horizontal::after {
+			content: "";
+			display: block;
+			position: absolute;
+			border: $stroke-texture;
 		}
 
 		&--vertical {
 			&::before, &::after {
 				left: 50%; 
+				width: 0px;
+				bottom: calc(50% + #{$item-width/2});
+				background-color: transparent;
+			}
+			&::after { 
+				bottom: auto; 
 				top: calc(50% + #{$item-width/2});
-				width: 1px; 
+				height: $space-between - $item-width; 
 			}
-			&::after { height: $space-between - $item-width; }
 			&:first-child::before {
-				top: auto; 
-				left: calc(50% + #{$item-width/2}); 
-				height: 100vw;
+				height: 100vh;
 			}
-			&:last-child::after { height: 100vw; }
+			&:last-child::after { 
+				height: 100vh; 
+			}
 		}
 
 		&--horizontal {
 			&::before, &::after {
 				top: 50%; 
 				left: calc(50% + #{$item-width/2});
-				height: 1px; 
+				height: 0px; 
 			}
 			&::after { width: $space-between - $item-width; }
 			&:first-child::before {
@@ -82,7 +91,6 @@
 				width: 100vw;
 			}
 			&:last-child::after { width: 100vw; }
-
 		}
 
 	}
@@ -98,9 +106,3 @@
 }
 
 
-.timeline {
-	background-image: linear-gradient(-25deg, #a4d8ff, #4c289d); 
-	background-size: 130%;
-	background-position: 0% 0;
-	transition: .5s;
-}

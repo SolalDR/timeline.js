@@ -58,15 +58,30 @@
 }
 
 .timeline__item {
-	&:nth-child(2n) .bubble--alternate {
-		bottom: 100px;
-		top: auto;
+	&.timeline__strokes--horizontal {
+		&:nth-child(2n) .bubble--alternate {
+			bottom: 100px;
+			top: auto;
+		}
+		&:nth-child(2n+1) .bubble--alternate{
+			top: 100px;
+			bottom: auto;
+		}
 	}
-	&:nth-child(2n+1) .bubble--alternate{
-		top: 100px;
-		bottom: auto;
+	&.timeline__strokes--vertical {
+		.bubble--alternate {
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		&:nth-child(2n) .bubble--alternate {
+			left: calc(50% + 25px + #{$item-width/2}) ;
+			right: auto;
+		}
+		&:nth-child(2n+1) .bubble--alternate{
+			right: calc(50% + 25px + #{$item-width/2}) ;
+			left: auto;
+		}
 	}
-
 }
 
 
