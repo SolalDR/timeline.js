@@ -19,8 +19,11 @@ var Timeline = function(args){
 	this.cycle = args.cycle ? true : false;	
 
 	// Bubble
-	this.bubble = { alternate : false } ;
+	this.bubble = { alternate : false, ongest: false, onactive: true, onkey: false } ;
 	this.bubble.alternate = args.bubble && args.bubble.alternate ? true : false;  
+	this.bubble.ongest = args.bubble && args.bubble.ongest ? true : false;  
+	this.bubble.onactive =  args.bubble && args.bubble.onactive===false ? false : true;  
+	this.bubble.onkey =  args.bubble && args.bubble.onkey ? true : false;  
 
 	// Events
 	this.events = { resize: true, gest: false, click: true, key: true}; 
@@ -28,7 +31,7 @@ var Timeline = function(args){
 		this.events.resize = args.events.resize === false ? false : true; 
 		this.events.click = args.events.click === false ? false : true; 
 		this.events.gest = args.events.gest ? true : false; 
-		this.events.key = args.events.key ? true : false; 
+		this.events.key = args.events.key === false ? false : true; 
 	} 
 
 
@@ -140,8 +143,10 @@ Timeline.prototype = {
 	},
 
 	bubbleUpdate: function(previous, next){
-		previous.bubble.hide();
-		next.bubble.display();
+		if( this.bubble.onactive ){
+			previous.bubble.hide();
+			next.bubble.display();
+		}
 	},
 
 	/*********************************
@@ -241,23 +246,42 @@ Timeline.prototype = {
 
 	onkey: function(){
 		var self = this;
+
 		document.addEventListener("keypress", function(e){
+			e.preventDefault();
 			switch( e.keyCode ){
-				case 39 : self.next(); break;
-				case 37 : self.previous(); break;
-				case 13 : console.log("Zoom");break;
+				case 39 : self.next(); 					break;
+				case 37 : self.previous(); 				break;
+				case 38 : self.bubbleActive("Up", "key"); 		break;  // Top
+				case 40 : self.bubbleActive("Down", "key"); 	break; 	// Bottom
+				case 13 : self.bubbleActive("Up", "key");		break;
 			}
+			return false;
 		}, false)
+	},
+
+	bubbleActive: function(direction, event){
+		if( (this.bubble.ongest && event=="gest") || (this.bubble.onkey && event=="key") ){
+			if( direction == "Up" || direction == "Long up" ){
+				this.items[this.currentRank].bubble.display();
+			} else {
+				this.items[this.currentRank].bubble.hide();
+			}
+			
+		}
 	},
 
 	ongest: function(){
 		gest.start();
 		gest.options.skinFilter(true);
 		gest.options.subscribeWithCallback(function(gesture) {
-			if(gesture.direction == "Left"){
-				timeline.next();
-			} else if( gesture.direction == "Right") {
-				timeline.previous();
+			switch (gesture.direction) {
+				case "Left" : timeline.next(); break; 
+				case "Right" :  timeline.previous(); break; 
+				case "Up" :  timeline.bubbleActive(gesture.direction, "gest"); break; 
+				case "Long up" :  timeline.bubbleActive(gesture.direction, "gest"); break; 
+				case "Down" : timeline.bubbleActive(gesture.direction, "gest");  break; 
+				case "Long down":  timeline.bubbleActive(gesture.direction, "gest"); break;  
 			}
 		});
 	},

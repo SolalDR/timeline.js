@@ -13,11 +13,10 @@ Timeline.Item = function(timeline, date, args){
 			title: args.title ? args.title : "", 
 			content: args.content ? args.content : ""
 		}
-
 		this.params = {}; 
 		this.coord = {};
 		this.create();
-		
+		this.initEvents();
 	}
 
 }
@@ -70,7 +69,7 @@ Timeline.Item.prototype = {
 		}, false)
 	},
 
-	events: function(){
+	initEvents: function(){
 		if( this.timeline.events.click ){
 			this.onclick();
 		}

@@ -24,4 +24,5 @@
 	"keys" => Move with keyboard
 	"gest" => Move with gesture recognition
 		
+- Manage timeline scope in gest event
 
