@@ -1,22 +1,27 @@
 function Timeline(args){
 	// this._direction = "horizontal";
-	this._currentRank = 0;
+	this._currentRank = !isNaN(args.current) ? args.current : 0;
 	this.container = args.container ? args.container : null;
 	this.direction = args.direction ? args.direction : "horizontal";
 
 	//Style
-	this.height = !isNaN(args.height) ? args.height : 500; 
+	this.height = !isNaN(args.height) ? args.height : window.innerHeight; 
 	this.width = !isNaN(args.width) ? args.width : window.innerWidth;
 	this.itemWidth = !isNaN(args.itemWidth) ? args.itemWidth : 70;  
 	this.spaceBetween = !isNaN(args.spaceBetween) ? args.spaceBetween : 150; 
 	this.theme = args.theme ? args.theme : "light";
+	this.paralax = args.paralax===false ? false : true; 
 
 	// Items 
 	this._order = "ASC";
 	this.items = []; 
 	this.activeItem = 0;
-	this.cycle = args.cycle ? true : false;
-	
+	this.cycle = args.cycle ? true : false;	
+
+	// Bubble
+	this.bubble = { alternate : false } ;
+	this.bubble.alternate = args.bubble && args.bubble.alternate ? true : false;  
+
 	// Events
 	this.events = { resize: true, gest: false, click: true, key: true}; 
 	if( args.events ){
@@ -93,9 +98,12 @@ Timeline.prototype = {
 
 	//Réordonne les éléments
 	ordonate: function(){
+
 		var mixItems = this.items; 
 		var items = [], logicOp; 
+
 		for(var i=0; i<mixItems.length; i++){
+
 			for(var j=0; j<items.length; j++) {
 				logicOp = (this.order == "ASC") ? mixItems[i].date.getTime() < items[j].date.getTime() : mixItems[i].date.getTime() > items[j].date.getTime();
 				if( logicOp ) {
@@ -106,33 +114,46 @@ Timeline.prototype = {
 					break;
 				}
 			}
+
 			if( !items[0] ){ 
 				items.push(mixItems[i]); 
 			}
+
 		}
+
 		this.items = items;
 	},
 
+	// Natural behaviour 
+	hideContent: function(item){
+		console.log(item);
+	},
+
 	// Rajoute une date
-	addDate: function(date, label){
-		callback = null;
+	addDate: function(date, args){
+		var title = args.title ? args.title : "";
+		var content = args.content ? args.content : ""; 
+
 		this.items.push({
 			date: Date.new(date), 
-			label: label, 
-			callback: callback, 
+			title: title,
+			content: content,
 			displayed: false, 
 			el: null
 		});
+
+		var item = this.items[this.items.length-1]; 
+		item.bubble = new TimelineBubble(item, this.bubble.alternate);
+
 		this.ordonate();
 	},
-
 
 	// Créer un élément html fonction d'un item
 	createElItem: function(rank){
 		var self = this, item = this.items[rank];
 		var el = Node.new("div", { "class": "timeline__item timeline__strokes--"+this.direction,  "data-rank": rank });
 		var content = Node.new("div", {"class": "timeline__content" });
-		content.innerHTML = item.label; 
+		content.innerHTML = item.date.getFullYear(); 
 		el.appendChild(content); 
 		return el
 	},
@@ -163,10 +184,16 @@ Timeline.prototype = {
 
 	},
 
+	bubbleUpdate: function(previous, next){
+		// if( this.bubbleOnActive ){
+			previous.bubble.hide();
+			next.bubble.display();
+		// }
+	},
 
 	/*********************************
 	*
-	*		MOVING
+	*			MOVING
 	*
 	*********************************/
 
@@ -174,11 +201,21 @@ Timeline.prototype = {
 	moveTo: function(rank){
 
 		if( this.items[rank] ){
+
+			this.bubbleUpdate(this.items[this.currentRank], this.items[rank]);
+
 			var coord = (this.items[rank].coord) ? this.items[rank].coord : this.calcCoord(rank);
 			var tx = -1*(coord.x-this.width/2);
 			var ty = -1*(coord.y-this.height/2);
 			this.layout.style.transform = "translateX("+tx+"px) translateY("+ty+"px)";
 			this.currentRank = rank;
+
+			if( this.paralax ){
+				var t = this.items.length * this.spaceBetween; 
+				var x = this.items[rank].coord.x - this.items[0].coord.x;
+				var paralaxDecal  = x/t*100;
+				this.el.style.backgroundPosition = paralaxDecal+"% 0";
+			}
 		}
 
 	},

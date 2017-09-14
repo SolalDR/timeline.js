@@ -7,6 +7,13 @@ Node.new = function(tag, attributes){
 	return el; 
 }
 
+Node.prototype.remove = function(){
+  var parent = this.parentNode;
+  if(parent){
+    parent.removeChild(this);
+  }
+}
+
 Node.prototype.addClass = function(className){
 	var str = (this.getAttribute("class")) ? this.getAttribute("class") : ""; 
 	if( !str.match(className) ){

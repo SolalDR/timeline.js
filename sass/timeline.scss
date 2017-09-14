@@ -1,12 +1,15 @@
 @import "variable";
+@import "bubble";
 @import "themes/light"; 
 
 
 .timeline {
 	position: relative;
 	width: 100%;
-	height: 500px; 
+	height: 100vh; 
 	overflow: hidden;
+	font-weight: 100; 
+	font-family: sans-serif; 
 	// Miss &--vertical | &--horizontal
 
 	//LAYOUT
@@ -82,7 +85,6 @@
 
 		}
 
-
 	}
 
 	&__content {
@@ -95,3 +97,10 @@
 	}
 }
 
+
+.timeline {
+	background-image: linear-gradient(-25deg, #a4d8ff, #4c289d); 
+	background-size: 130%;
+	background-position: 0% 0;
+	transition: .5s;
+}
