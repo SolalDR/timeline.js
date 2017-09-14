@@ -19,11 +19,11 @@ var Timeline = function(args){
 	this.cycle = args.cycle ? true : false;	
 
 	// Bubble
-	this.bubble = { alternate : false, ongest: false, onactive: true, onkey: false } ;
+	this.bubble = { alternate : false, gest: false, active: true, key: false } ;
 	this.bubble.alternate = args.bubble && args.bubble.alternate ? true : false;  
-	this.bubble.ongest = args.bubble && args.bubble.ongest ? true : false;  
-	this.bubble.onactive =  args.bubble && args.bubble.onactive===false ? false : true;  
-	this.bubble.onkey =  args.bubble && args.bubble.onkey ? true : false;  
+	this.bubble.gest = args.bubble && args.bubble.gest ? true : false;  
+	this.bubble.active =  args.bubble && args.bubble.active===false ? false : true;  
+	this.bubble.key =  args.bubble && args.bubble.key ? true : false;  
 
 	// Events
 	this.events = { resize: true, gest: false, click: true, key: true}; 
@@ -261,7 +261,7 @@ Timeline.prototype = {
 	},
 
 	bubbleActive: function(direction, event){
-		if( (this.bubble.ongest && event=="gest") || (this.bubble.onkey && event=="key") ){
+		if( (this.bubble.gest && event=="gest") || (this.bubble.key && event=="key") ){
 			if( direction == "Up" || direction == "Long up" ){
 				this.items[this.currentRank].bubble.display();
 			} else {

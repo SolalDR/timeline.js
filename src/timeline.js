@@ -98,11 +98,11 @@ var Timeline = function(args){
 	this.cycle = args.cycle ? true : false;	
 
 	// Bubble
-	this.bubble = { alternate : false, ongest: false, onactive: true, onkey: false } ;
+	this.bubble = { alternate : false, gest: false, active: true, key: false } ;
 	this.bubble.alternate = args.bubble && args.bubble.alternate ? true : false;  
-	this.bubble.ongest = args.bubble && args.bubble.ongest ? true : false;  
-	this.bubble.onactive =  args.bubble && args.bubble.onactive===false ? false : true;  
-	this.bubble.onkey =  args.bubble && args.bubble.onkey ? true : false;  
+	this.bubble.gest = args.bubble && args.bubble.gest ? true : false;  
+	this.bubble.active =  args.bubble && args.bubble.active===false ? false : true;  
+	this.bubble.key =  args.bubble && args.bubble.key ? true : false;  
 
 	// Events
 	this.events = { resize: true, gest: false, click: true, key: true}; 
@@ -340,7 +340,7 @@ Timeline.prototype = {
 	},
 
 	bubbleActive: function(direction, event){
-		if( (this.bubble.ongest && event=="gest") || (this.bubble.onkey && event=="key") ){
+		if( (this.bubble.gest && event=="gest") || (this.bubble.key && event=="key") ){
 			if( direction == "Up" || direction == "Long up" ){
 				this.items[this.currentRank].bubble.display();
 			} else {
@@ -406,152 +406,6 @@ Timeline.prototype = {
 			if( this.events.resize ){ this.onresize(); }
 			if(this.events.gest) { this.ongest(); }
 			if(this.events.key) { this.onkey(); }
-		}
-	}
-
-}
-Timeline.Bubble = function(item, alternate){
-	this.item = item; 
-	this.generated = false;
-
-	this.texts = {
-		title : item.texts.title,
-		content : item.texts.content
-	}
-
-	this.els = {};
-
-	this.params = {
-		alternate: alternate
-	}
-}
-
-Timeline.Bubble.prototype = {
-
-	get el(){
-		return this.els.bubble; 
-	},
-
-	create: function(){
-		var self = this;
-		this.generated = true; 
-		this.els.bubble = document.createElement("div");
-		this.els.title = document.createElement("p"); 
-		this.els.content = document.createElement("div");
-		this.els.close = document.createElement("button"); 
-		var bubbleClass = (this.params.alternate) ? "bubble bubble--alternate" : "bubble"
-		this.els.bubble.addClass(bubbleClass); 
-		this.els.content.addClass("bubble__content");
-		this.els.title.addClass("bubble__title"); 
-		this.els.close.addClass("bubble__close");
-		this.els.content.innerHTML = this.texts.content;
-		this.els.title.innerHTML = this.texts.title;
-		this.els.bubble.appendChild(this.els.title);
-		this.els.bubble.appendChild(this.els.content);
-		this.els.bubble.appendChild(this.els.close);
-
-		this.els.close.addEventListener("click", function(){
-			self.hide();
-		}); 
-		console.log(this.els.bubble, this.item);
-		this.item.el.appendChild(this.els.bubble);
-		
-	},
-
-	destroy: function(){
-		this.els.bubble.remove();
-	},
-
-	display: function(){
-		if( !this.generated ){
-			this.create();
-		}
-		this.els.bubble.removeClass("bubble--hide");
-		this.els.bubble.addClass("bubble--display");
-	},
-
-	hide : function(){
-		if( this.els.bubble ){
-			this.els.bubble.removeClass("bubble--display");
-			this.els.bubble.addClass("bubble--hide");
-		}
-	}
-
-}
-Timeline.Item = function(timeline, date, args){
-	this.timeline = timeline; 
-	this._rank = !isNaN(args.rank) ? args.rank : null;
-
-	if( !isNaN(this.rank) ){
-
-		this.displayed = false;
-		this.date = Date.new(date); 
-		this.el; 
-		this.bubble;
-
-		this.texts = {
-			title: args.title ? args.title : "", 
-			content: args.content ? args.content : ""
-		}
-		this.params = {}; 
-		this.coord = {};
-		this.create();
-		this.initEvents();
-	}
-
-}
-
-Timeline.Item.prototype = {
-
-	set rank(rank){
-		this._rank = rank;
-		this.calcPosition();
-		if( this.el ){
-			this.el.setAttribute("data-rank", this.rank);
-		} 
-	},
-
-	get rank(){
-		return this._rank;
-	},
-
-	set position(coords){
-		this.el.style.left = coords.x+"px";
-		this.el.style.top = coords.y+"px";
-	},
-
-	create: function(){
-		this.el = Node.new("div", { "class": "timeline__item timeline__strokes--"+this.timeline.direction,  "data-rank": this.rank });
-		this.content = Node.new("div", {"class": "timeline__content" });
-		this.content.innerHTML = this.date.getFullYear();
-		this.el.appendChild(this.content);
-
-		this.calcPosition();
-		this.createBubble();
-	},
-
-
-	calcPosition: function(){
-		var t = this.timeline; 
-		this.coord.x = t.direction == "horizontal" ? t.spaceBetween/2+this.rank*t.spaceBetween+t.width : t.width/2; 
-		this.coord.y = t.direction == "vertical" ? t.spaceBetween/2+this.rank*t.spaceBetween : t.height/2; 
-		this.position = this.coord; 
-	},
-
-	createBubble: function(){
-		this.bubble = new this.timeline.constructor.Bubble(this, this.timeline.bubble.alternate);
-	},
-
-	onclick: function(){
-		var self = this; 
-		this.el.addEventListener("click", function(){
-			self.timeline.moveTo(self.rank);
-		}, false)
-	},
-
-	initEvents: function(){
-		if( this.timeline.events.click ){
-			this.onclick();
 		}
 	}
 
@@ -1208,3 +1062,149 @@ window.gest = (function (window) {
 
 	return new gest();
 }(window));
+Timeline.Bubble = function(item, alternate){
+	this.item = item; 
+	this.generated = false;
+
+	this.texts = {
+		title : item.texts.title,
+		content : item.texts.content
+	}
+
+	this.els = {};
+
+	this.params = {
+		alternate: alternate
+	}
+}
+
+Timeline.Bubble.prototype = {
+
+	get el(){
+		return this.els.bubble; 
+	},
+
+	create: function(){
+		var self = this;
+		this.generated = true; 
+		this.els.bubble = document.createElement("div");
+		this.els.title = document.createElement("p"); 
+		this.els.content = document.createElement("div");
+		this.els.close = document.createElement("button"); 
+		var bubbleClass = (this.params.alternate) ? "bubble bubble--alternate" : "bubble"
+		this.els.bubble.addClass(bubbleClass); 
+		this.els.content.addClass("bubble__content");
+		this.els.title.addClass("bubble__title"); 
+		this.els.close.addClass("bubble__close");
+		this.els.content.innerHTML = this.texts.content;
+		this.els.title.innerHTML = this.texts.title;
+		this.els.bubble.appendChild(this.els.title);
+		this.els.bubble.appendChild(this.els.content);
+		this.els.bubble.appendChild(this.els.close);
+
+		this.els.close.addEventListener("click", function(){
+			self.hide();
+		}); 
+		console.log(this.els.bubble, this.item);
+		this.item.el.appendChild(this.els.bubble);
+		
+	},
+
+	destroy: function(){
+		this.els.bubble.remove();
+	},
+
+	display: function(){
+		if( !this.generated ){
+			this.create();
+		}
+		this.els.bubble.removeClass("bubble--hide");
+		this.els.bubble.addClass("bubble--display");
+	},
+
+	hide : function(){
+		if( this.els.bubble ){
+			this.els.bubble.removeClass("bubble--display");
+			this.els.bubble.addClass("bubble--hide");
+		}
+	}
+
+}
+Timeline.Item = function(timeline, date, args){
+	this.timeline = timeline; 
+	this._rank = !isNaN(args.rank) ? args.rank : null;
+
+	if( !isNaN(this.rank) ){
+
+		this.displayed = false;
+		this.date = Date.new(date); 
+		this.el; 
+		this.bubble;
+
+		this.texts = {
+			title: args.title ? args.title : "", 
+			content: args.content ? args.content : ""
+		}
+		this.params = {}; 
+		this.coord = {};
+		this.create();
+		this.initEvents();
+	}
+
+}
+
+Timeline.Item.prototype = {
+
+	set rank(rank){
+		this._rank = rank;
+		this.calcPosition();
+		if( this.el ){
+			this.el.setAttribute("data-rank", this.rank);
+		} 
+	},
+
+	get rank(){
+		return this._rank;
+	},
+
+	set position(coords){
+		this.el.style.left = coords.x+"px";
+		this.el.style.top = coords.y+"px";
+	},
+
+	create: function(){
+		this.el = Node.new("div", { "class": "timeline__item timeline__strokes--"+this.timeline.direction,  "data-rank": this.rank });
+		this.content = Node.new("div", {"class": "timeline__content" });
+		this.content.innerHTML = this.date.getFullYear();
+		this.el.appendChild(this.content);
+
+		this.calcPosition();
+		this.createBubble();
+	},
+
+
+	calcPosition: function(){
+		var t = this.timeline; 
+		this.coord.x = t.direction == "horizontal" ? t.spaceBetween/2+this.rank*t.spaceBetween+t.width : t.width/2; 
+		this.coord.y = t.direction == "vertical" ? t.spaceBetween/2+this.rank*t.spaceBetween : t.height/2; 
+		this.position = this.coord; 
+	},
+
+	createBubble: function(){
+		this.bubble = new this.timeline.constructor.Bubble(this, this.timeline.bubble.alternate);
+	},
+
+	onclick: function(){
+		var self = this; 
+		this.el.addEventListener("click", function(){
+			self.timeline.moveTo(self.rank);
+		}, false)
+	},
+
+	initEvents: function(){
+		if( this.timeline.events.click ){
+			this.onclick();
+		}
+	}
+
+}
