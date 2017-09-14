@@ -1,17 +1,24 @@
-function TimelineBubble(item, alternate){
+Timeline.Bubble = function(item, alternate){
 	this.item = item; 
 	this.generated = false;
-	this.alternate = alternate; 
 
 	this.texts = {
-		title : item.title,
-		content : item.content
+		title : item.texts.title,
+		content : item.texts.content
 	}
+
 	this.els = {};
+
+	this.params = {
+		alternate: alternate
+	}
 }
 
+Timeline.Bubble.prototype = {
 
-TimelineBubble.prototype = {
+	get el(){
+		return this.els.bubble; 
+	},
 
 	create: function(){
 		var self = this;
@@ -20,7 +27,7 @@ TimelineBubble.prototype = {
 		this.els.title = document.createElement("p"); 
 		this.els.content = document.createElement("div");
 		this.els.close = document.createElement("button"); 
-		var bubbleClass = (this.alternate) ? "bubble bubble--alternate" : "bubble"
+		var bubbleClass = (this.params.alternate) ? "bubble bubble--alternate" : "bubble"
 		this.els.bubble.addClass(bubbleClass); 
 		this.els.content.addClass("bubble__content");
 		this.els.title.addClass("bubble__title"); 

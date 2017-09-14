@@ -1,4 +1,4 @@
-function Timeline(args){
+var Timeline = function(args){
 	// this._direction = "horizontal";
 	this._currentRank = !isNaN(args.current) ? args.current : 0;
 	this.container = args.container ? args.container : null;
@@ -37,6 +37,7 @@ function Timeline(args){
 
 Timeline.prototype = {
 
+	constructor: Timeline,
 	/*********************************
 	*
 	*		Getters / Setters
@@ -121,6 +122,9 @@ Timeline.prototype = {
 
 		}
 
+		for(i=0; i<items.length; i++){
+			items[i].rank = i; 
+		}
 		this.items = items;
 	},
 
@@ -131,64 +135,13 @@ Timeline.prototype = {
 
 	// Rajoute une date
 	addDate: function(date, args){
-		var title = args.title ? args.title : "";
-		var content = args.content ? args.content : ""; 
-
-		this.items.push({
-			date: Date.new(date), 
-			title: title,
-			content: content,
-			displayed: false, 
-			el: null
-		});
-
-		var item = this.items[this.items.length-1]; 
-		item.bubble = new TimelineBubble(item, this.bubble.alternate);
-
-		this.ordonate();
-	},
-
-	// Créer un élément html fonction d'un item
-	createElItem: function(rank){
-		var self = this, item = this.items[rank];
-		var el = Node.new("div", { "class": "timeline__item timeline__strokes--"+this.direction,  "data-rank": rank });
-		var content = Node.new("div", {"class": "timeline__content" });
-		content.innerHTML = item.date.getFullYear(); 
-		el.appendChild(content); 
-		return el
-	},
-
-
-	//Gère le changement d'état de la timeline
-	manageItem: function(rank){
-		var item = this.items[rank]; 
-		if( !item.el ){
-			item.el = this.createElItem(rank);
-			var coord = this.calcCoord(rank);
-			item.el.style.left = coord.x+"px";
-			item.el.style.top = coord.y+"px";
-			this.clickItem(rank);
-			this.layout.appendChild(item.el);
-			this.manageSize(); // Recalcule les tailles après ajout de l'élément
-		}
-	},
-
-	// Calcul les coordonnées d'un item
-	calcCoord: function(rank){
-
-		var item = this.items[rank];
-		var x = this.direction == "horizontal" ? this.spaceBetween/2+rank*this.spaceBetween+this.width : this.width/2; 
-		var y = this.direction == "vertical" ? this.spaceBetween/2+rank*this.spaceBetween : this.height/2; 
-		item.coord = {x: x, y: y};
-		return item.coord;
-
+		args.rank = this.items.length;
+		this.items.push(new this.constructor.Item(this, date, args));
 	},
 
 	bubbleUpdate: function(previous, next){
-		// if( this.bubbleOnActive ){
-			previous.bubble.hide();
-			next.bubble.display();
-		// }
+		previous.bubble.hide();
+		next.bubble.display();
 	},
 
 	/*********************************
@@ -261,9 +214,11 @@ Timeline.prototype = {
 		if(!this.el) {
 			this.create();
 		}
+		this.ordonate();
 		for(i=0; i<this.items.length; i++){
 			if( this.items[i].displayed === false ){
-				this.manageItem(i);
+				this.layout.appendChild(this.items[i].el);
+				this.manageSize();
 			}
 		}
 		this.moveTo(this.currentRank);
@@ -275,15 +230,6 @@ Timeline.prototype = {
 	*		Events
 	*
 	*********************************/
-
-	clickItem: function(rank){
-		var self = this;
-		if( this.events.click ){
-			this.items[rank].el.addEventListener("click", function(){
-				self.moveTo(parseInt(this.getAttribute("data-rank")));
-			}, false)
-		}
-	},
 
 	onresize: function(){
 		var self = this;

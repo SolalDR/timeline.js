@@ -16,7 +16,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('scripts', function() {
-  return gulp.src('./js/*.js')
+  return gulp.src('./js/**/*.js')
     .pipe(plugins.concat('timeline.js'))
     .pipe(gulp.dest('./src/'));
 });
